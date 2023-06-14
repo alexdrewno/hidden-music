@@ -1,7 +1,12 @@
+import { NavigationContainer } from '@react-navigation/native'
 import React from 'react'
 
-import { MusicList } from './app/screens/MusicList'
+import { AppNavigator } from './app/navigation/AppNavigation'
 
 export default function App() {
-    return <MusicList />
+    return (
+        <NavigationContainer>
+            <AppNavigator />
+        </NavigationContainer>
+    )
 }

@@ -1,26 +1,31 @@
 import React from 'react'
-import { Image, StyleSheet, Text, View } from 'react-native'
+import { Image, StyleSheet, Text, View, TouchableOpacity } from 'react-native'
 
 type SongCardProps = {
     song: Song
+    onPressPlay: any
 }
 
 type Song = {
     title: string
-    length: number
+    imageUri: string
+    songUri: string
 }
 
-// TODO add waveform: https://github.com/juananime/react-native-audiowaveform
-//
-export function SongCard({ song }: SongCardProps) {
+export function SongCard({ song, onPressPlay }: SongCardProps) {
     return (
         <View style={styles.container}>
-            <Image style={styles.imageContainer} source={{ uri: '' }} />
+            <Image
+                style={styles.imageContainer}
+                source={{ uri: song.imageUri }}
+            />
             <View style={styles.detailContainer}>
-                <View style={styles.waveForm} />
                 <View style={styles.subdetailContainer}>
-                    <Text>{song.title + ' // ' + song.length}</Text>
+                    <Text>{song.title + ' // ' + 'TODO LENGTH'}</Text>
                 </View>
+                <TouchableOpacity style={styles.play} onPress={onPressPlay}>
+                    <Text>Play</Text>
+                </TouchableOpacity>
             </View>
         </View>
     )
@@ -28,7 +33,7 @@ export function SongCard({ song }: SongCardProps) {
 
 const styles = StyleSheet.create({
     container: {
-        width: 350,
+        width: 300,
         height: 100,
         backgroundColor: 'gray',
         flexDirection: 'row',
@@ -41,7 +46,6 @@ const styles = StyleSheet.create({
     },
 
     detailContainer: {
-        backgroundColor: 'yellow',
         flex: 1,
         flexDirection: 'column',
     },
@@ -57,5 +61,14 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         alignItems: 'center',
         paddingHorizontal: 5,
+    },
+
+    play: {
+        width: 40,
+        height: 40,
+        justifyContent: 'center',
+        alignItems: 'center',
+        backgroundColor: 'lightblue',
+        alignSelf: 'flex-end',
     },
 })
