@@ -35,7 +35,7 @@ const styles = StyleSheet.create({
     },
 
     imageContainer: {
-        backgroundColor: 'blue',
+        backgroundColor: 'gray',
         width: 100,
         height: 100,
     },
