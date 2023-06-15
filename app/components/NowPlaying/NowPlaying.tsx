@@ -1,66 +1,14 @@
-import React, { useEffect, useState } from 'react'
-import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
-import { Audio } from 'expo-av'
-import { Sound } from 'expo-av/build/Audio'
-
-import { SongData } from '../../data/SongStorage'
+import React from 'react'
+import { Image, StyleSheet, Text, View } from 'react-native'
+import { useMusicContext } from '../../hooks/useMusicContext'
 import { THEME } from '../../styles/Colors'
 import { PauseButton } from '../icons/Pause'
 import { PlayButton } from '../icons/Play'
 
-type NowPlayingProps = {
-    song?: SongData
-}
+export function NowPlaying() {
+    const { isPlaying, curSong, pauseSong, resumeSong } = useMusicContext()
 
-export function NowPlaying({ song }: NowPlayingProps) {
-    const [sound, setSound] = useState<Sound>()
-    const [isPlaying, setIsPlaying] = useState<boolean>(false)
-
-    async function playSound(song: SongData) {
-        try {
-            await Audio.setAudioModeAsync({
-                staysActiveInBackground: true,
-                playsInSilentModeIOS: true,
-            })
-
-            const { sound } = await Audio.Sound.createAsync({
-                uri: song.songUri,
-            })
-
-            setSound(sound)
-
-            await sound.playAsync()
-        } catch (e) {
-            console.error(e)
-        }
-    }
-
-    async function pauseSound() {
-        await sound?.pauseAsync()
-        setIsPlaying(false)
-    }
-
-    async function resumeSound() {
-        await sound?.playAsync()
-        setIsPlaying(true)
-    }
-
-    useEffect(() => {
-        return sound
-            ? () => {
-                  sound.unloadAsync()
-              }
-            : undefined
-    }, [sound])
-
-    useEffect(() => {
-        if (song) {
-            playSound(song)
-            setIsPlaying(true)
-        }
-    }, [song])
-
-    if (!song) {
+    if (!curSong) {
         return (
             <View style={styles.container}>
                 <Text style={styles.text}>Not currently playing</Text>
@@ -73,15 +21,15 @@ export function NowPlaying({ song }: NowPlayingProps) {
             <View style={styles.titleAndImage}>
                 <Image
                     style={styles.songImage}
-                    source={{ uri: song.imageUri }}
+                    source={{ uri: curSong.imageUri }}
                 />
-                <Text style={styles.songTitleText}>{song.title} </Text>
+                <Text style={styles.songTitleText}>{curSong.title}</Text>
             </View>
             <View style={styles.buttonContainer}>
                 {isPlaying ? (
-                    <PauseButton onPress={pauseSound} />
+                    <PauseButton onPress={pauseSong} />
                 ) : (
-                    <PlayButton onPress={resumeSound} />
+                    <PlayButton onPress={resumeSong} />
                 )}
             </View>
         </View>

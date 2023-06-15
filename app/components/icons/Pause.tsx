@@ -1,10 +1,15 @@
 import React from 'react'
 
-import { TouchableOpacity, Image, StyleSheet } from 'react-native'
+import {
+    TouchableOpacity,
+    Image,
+    StyleSheet,
+    GestureResponderEvent,
+} from 'react-native'
 import PauseImg from '../../assets/pause.png'
 
 type PauseProps = {
-    onPress: any
+    onPress: (event: GestureResponderEvent) => void
 }
 
 export function PauseButton({ onPress }: PauseProps) {

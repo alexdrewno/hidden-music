@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React from 'react'
 
 import { useNavigation } from '@react-navigation/native'
 import {
@@ -9,23 +9,23 @@ import {
     View,
 } from 'react-native'
 import { SongCard } from '../../components/SongCard/SongCard'
-import { fetchSongs, SongData } from '../../data/SongStorage'
 import { NowPlaying } from '../../components/NowPlaying/NowPlaying'
 import { THEME } from '../../styles/Colors'
+import { useMusicContext } from '../../hooks/useMusicContext'
+import { SongData } from '../../data/SongStorage'
 
 export function MusicList() {
+    const { songs, curSong, setCurSong, pauseSong, isPlaying, resumeSong } =
+        useMusicContext()
     const navigation = useNavigation()
-    const [songs, setSongs] = useState<SongData[]>([])
-    const [nowPlaying, setNowPlaying] = useState<SongData>()
 
-    async function _fetchAllSongs() {
-        const fetchedSongs = await fetchSongs()
-        setSongs(fetchedSongs)
+    function _onPressPlay(song: SongData) {
+        if (!isPlaying && song === curSong) {
+            resumeSong()
+        } else {
+            setCurSong(song)
+        }
     }
-
-    useEffect(() => {
-        _fetchAllSongs()
-    }, [])
 
     return (
         <SafeAreaView style={styles.safeArea}>
@@ -46,14 +46,15 @@ export function MusicList() {
                         <View key={i} style={styles.cardContainer}>
                             <SongCard
                                 song={song}
-                                onPressPlay={() => setNowPlaying(song)}
-                                isPlaying={song === nowPlaying}
+                                onPressPlay={() => _onPressPlay(song)}
+                                onPressPause={pauseSong}
+                                isPlaying={song === curSong && isPlaying}
                             />
                         </View>
                     ))}
                 </ScrollView>
             </View>
-            <NowPlaying song={nowPlaying} />
+            <NowPlaying />
         </SafeAreaView>
     )
 }
