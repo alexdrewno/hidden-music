@@ -1,11 +1,18 @@
 import React from 'react'
-import { Image, StyleSheet, Text, View } from 'react-native'
+import {
+    GestureResponderEvent,
+    Image,
+    StyleSheet,
+    Text,
+    View,
+} from 'react-native'
 import { PauseButton } from '../icons/Pause'
 import { PlayButton } from '../icons/Play'
 
 type SongCardProps = {
     song: Song
-    onPressPlay: any
+    onPressPlay: (event: GestureResponderEvent) => void
+    onPressPause: (event: GestureResponderEvent) => void
     isPlaying: boolean
 }
 
@@ -15,7 +22,12 @@ type Song = {
     songUri: string
 }
 
-export function SongCard({ song, onPressPlay, isPlaying }: SongCardProps) {
+export function SongCard({
+    song,
+    onPressPlay,
+    onPressPause,
+    isPlaying,
+}: SongCardProps) {
     return (
         <View style={[isPlaying && styles.selected, styles.container]}>
             <Image
@@ -25,14 +37,13 @@ export function SongCard({ song, onPressPlay, isPlaying }: SongCardProps) {
             <View style={styles.detailContainer}>
                 <View style={styles.subdetailContainer}>
                     <Text style={styles.songTitle}>{song.title}</Text>
-                    <Text style={styles.songSubtitle}>3:43</Text>
                 </View>
                 {isPlaying ? (
-                    <View style={styles.play}>
-                        <PauseButton onPress={onPressPlay} />
+                    <View style={styles.playPause}>
+                        <PauseButton onPress={onPressPause} />
                     </View>
                 ) : (
-                    <View style={styles.play}>
+                    <View style={styles.playPause}>
                         <PlayButton onPress={onPressPlay} />
                     </View>
                 )}
@@ -73,7 +84,7 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
     },
 
-    play: {
+    playPause: {
         width: 40,
         height: 40,
         justifyContent: 'center',

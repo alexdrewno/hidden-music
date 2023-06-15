@@ -1,10 +1,15 @@
 import React from 'react'
 
-import { TouchableOpacity, Image, StyleSheet } from 'react-native'
+import {
+    TouchableOpacity,
+    Image,
+    StyleSheet,
+    GestureResponderEvent,
+} from 'react-native'
 import PlayImg from '../../assets/play.png'
 
 type PlayProps = {
-    onPress: any
+    onPress: (event: GestureResponderEvent) => void
 }
 
 export function PlayButton({ onPress }: PlayProps) {

@@ -3,7 +3,7 @@ import { View, Text, TextInput as RNTextInput, StyleSheet } from 'react-native'
 
 type TextInputProps = {
     title: string
-    onChangeText: any
+    onChangeText: (text: string) => void
 }
 
 export function TextInput(props: TextInputProps) {

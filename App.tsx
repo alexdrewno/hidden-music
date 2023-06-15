@@ -1,12 +1,15 @@
 import { NavigationContainer } from '@react-navigation/native'
 import React from 'react'
+import { MusicProvider } from './app/hooks/useMusicContext'
 
 import { AppNavigator } from './app/navigation/AppNavigation'
 
 export default function App() {
     return (
         <NavigationContainer>
-            <AppNavigator />
+            <MusicProvider>
+                <AppNavigator />
+            </MusicProvider>
         </NavigationContainer>
     )
 }
