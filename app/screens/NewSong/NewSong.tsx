@@ -5,6 +5,7 @@ import { getDocumentAsync, DocumentResult } from 'expo-document-picker'
 import * as ImagePicker from 'expo-image-picker'
 import { saveSongToStorage, SongData } from '../../data/SongStorage'
 import { useNavigation } from '@react-navigation/native'
+import { THEME } from '../../styles/Colors'
 
 export function NewSong() {
     const [songFile, setSongFile] = useState<DocumentResult>()
@@ -18,7 +19,6 @@ export function NewSong() {
             const result: DocumentResult = await getDocumentAsync({
                 type: 'audio/*',
             })
-            console.log(result)
 
             if (result.type === 'success') {
                 setSongFile(result)
@@ -53,7 +53,6 @@ export function NewSong() {
                     songUri: songFile.uri,
                     title: title,
                 }
-                console.log('SAVING SONG...:', songData)
 
                 await saveSongToStorage(songData)
                 navigation.goBack()
@@ -65,17 +64,17 @@ export function NewSong() {
 
     return (
         <View style={styles.container}>
-            <TouchableOpacity
-                style={styles.imageContainer}
-                onPress={onPressImage}
-            >
-                {image && (
-                    <Image style={styles.image} source={{ uri: image }} />
-                )}
-            </TouchableOpacity>
+            <View style={styles.card}>
+                <Text style={styles.title}>New Song</Text>
+                <TouchableOpacity
+                    style={styles.imageContainer}
+                    onPress={onPressImage}
+                >
+                    {image && (
+                        <Image style={styles.image} source={{ uri: image }} />
+                    )}
+                </TouchableOpacity>
 
-            <View style={styles.contentContainer}>
-                <Text style={styles.title}>Song Details</Text>
                 <TextInput onChangeText={setTitle} title='Title' />
 
                 <View style={styles.fileContainer}>
@@ -92,9 +91,15 @@ export function NewSong() {
                     </TouchableOpacity>
                 </View>
 
-                <TouchableOpacity onPress={saveSong}>
-                    <Text> Done </Text>
-                </TouchableOpacity>
+                <View style={styles.buttonRow}>
+                    <TouchableOpacity onPress={() => navigation.goBack()}>
+                        <Text>Cancel</Text>
+                    </TouchableOpacity>
+
+                    <TouchableOpacity onPress={saveSong}>
+                        <Text>Submit</Text>
+                    </TouchableOpacity>
+                </View>
             </View>
         </View>
     )
@@ -103,14 +108,31 @@ export function NewSong() {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+        backgroundColor: THEME.main,
+    },
+
+    card: {
+        padding: 20,
+        width: '80%',
+        backgroundColor: 'white',
+
+        shadowColor: '#000000',
+        shadowOffset: {
+            width: 0,
+            height: 3,
+        },
+        shadowOpacity: 0.18,
+        shadowRadius: 4.59,
+        elevation: 5,
     },
 
     imageContainer: {
-        width: '100%',
-        height: '33%',
-        backgroundColor: 'gray',
-        borderBottomLeftRadius: 10,
-        borderBottomRightRadius: 10,
+        width: 100,
+        height: 100,
+        borderWidth: 0.5,
+        marginBottom: 15,
     },
 
     image: {
@@ -143,7 +165,9 @@ const styles = StyleSheet.create({
         alignItems: 'center',
     },
 
-    contentContainer: {
-        padding: 20,
+    buttonRow: {
+        marginTop: 10,
+        flexDirection: 'row',
+        justifyContent: 'space-between',
     },
 })
