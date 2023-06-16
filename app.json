@@ -1,13 +1,13 @@
 {
     "expo": {
-        "name": "Hidden Music",
+        "name": "HiddenMusic",
         "slug": "hidden-music",
         "version": "1.0.0",
         "orientation": "portrait",
-        "icon": "./assets/icon.png",
+        "icon": "./app/assets/icon.png",
         "userInterfaceStyle": "light",
         "splash": {
-            "image": "./assets/splash.png",
+            "image": "./app/assets/splash.png",
             "resizeMode": "contain",
             "backgroundColor": "#ffffff"
         },
@@ -16,13 +16,15 @@
             "supportsTablet": true,
             "infoPlist": {
                 "UIBackgroundModes": ["audio"]
-            }
+            },
+            "bundleIdentifier": "com.kirbec.hiddenmusic"
         },
         "android": {
             "adaptiveIcon": {
-                "foregroundImage": "./assets/adaptive-icon.png",
+                "foregroundImage": "./app/assets/adaptive-icon.png",
                 "backgroundColor": "#ffffff"
-            }
+            },
+            "permissions": ["android.permission.RECORD_AUDIO"]
         },
         "web": {
             "favicon": "./assets/favicon.png"
@@ -34,6 +36,11 @@
                     "photosPermission": "The app accesses your photos to use as song covers."
                 }
             ]
-        ]
+        ],
+        "extra": {
+            "eas": {
+                "projectId": "2291ef6f-cc46-42e3-a617-a87eae96d658"
+            }
+        }
     }
 }
