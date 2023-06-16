@@ -14,6 +14,24 @@ export async function saveSongToStorage(song: Track) {
     }
 }
 
+export async function removeSongFromStorage(song: Track) {
+    try {
+        const songs = await fetchSongs()
+
+        const removalIndex = songs.findIndex((e, i) => {
+            e.url === song.url && e.title === song.title
+            return i
+        })
+
+        if (removalIndex > -1) {
+            songs.splice(removalIndex, 1)
+            await AsyncStorage.setItem(SONG_KEY, JSON.stringify(songs))
+        }
+    } catch (e) {
+        console.error(e)
+    }
+}
+
 export async function fetchSongs(): Promise<Track[]> {
     try {
         const songsString = await AsyncStorage.getItem(SONG_KEY)

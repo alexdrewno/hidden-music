@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 
 import { useNavigation } from '@react-navigation/native'
 import {
@@ -13,10 +13,20 @@ import { NowPlaying } from '../../components/NowPlaying/NowPlaying'
 import { THEME } from '../../styles/Colors'
 import { useMusicContext } from '../../hooks/useMusicContext'
 import { Track } from 'react-native-track-player'
+import { removeSongFromStorage } from '../../data/SongStorage'
 
 export function MusicList() {
-    const { songs, curSong, playSong, pauseSong, isPlaying, resumeSong } =
-        useMusicContext()
+    const {
+        songs,
+        curSong,
+        playSong,
+        pauseSong,
+        isPlaying,
+        resumeSong,
+        fetchAllSongs,
+    } = useMusicContext()
+
+    const [isEditing, setIsEditing] = useState<boolean>(false)
     const navigation = useNavigation()
 
     function _onPressPlay(song: Track) {
@@ -27,9 +37,21 @@ export function MusicList() {
         }
     }
 
+    async function _onPressDelete(song: Track) {
+        await removeSongFromStorage(song)
+        await fetchAllSongs()
+    }
+
     return (
         <SafeAreaView style={styles.safeArea}>
             <View style={styles.buttonContainer}>
+                <Button
+                    color='white'
+                    title='Edit'
+                    onPress={() =>
+                        setIsEditing((prevIsEditing: boolean) => !prevIsEditing)
+                    }
+                />
                 <Button
                     color='white'
                     title='Add'
@@ -48,7 +70,9 @@ export function MusicList() {
                                 song={song}
                                 onPressPlay={() => _onPressPlay(song)}
                                 onPressPause={pauseSong}
+                                onPressDelete={() => _onPressDelete(song)}
                                 isPlaying={song === curSong && isPlaying}
+                                isEditing={isEditing}
                             />
                         </View>
                     ))}
@@ -91,7 +115,8 @@ const styles = StyleSheet.create({
 
     buttonContainer: {
         backgroundColor: THEME.main,
-        alignItems: 'flex-end',
+        flexDirection: 'row',
+        justifyContent: 'space-between',
         width: '100%',
         marginBottom: 10,
 
