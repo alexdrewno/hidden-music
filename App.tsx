@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react'
 import { NavigationContainer } from '@react-navigation/native'
-import TrackPlayer from 'react-native-track-player'
+import TrackPlayer, { Capability } from 'react-native-track-player'
 import { Asset } from 'expo-asset'
 
 import Play from './app/assets/play.png'
@@ -21,6 +21,20 @@ export default function App() {
         try {
             cacheImages([Play, Pause, X])
             await TrackPlayer.setupPlayer()
+            await TrackPlayer.updateOptions({
+                capabilities: [
+                    Capability.Play,
+                    Capability.Pause,
+                    Capability.SkipToNext,
+                    Capability.SkipToPrevious,
+                ],
+                compactCapabilities: [
+                    Capability.Play,
+                    Capability.Pause,
+                    Capability.SkipToNext,
+                    Capability.SkipToPrevious,
+                ],
+            })
         } catch (e) {
             console.error(e)
         }
