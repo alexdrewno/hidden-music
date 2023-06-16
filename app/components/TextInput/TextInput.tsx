@@ -22,7 +22,7 @@ export function TextInput(props: TextInputProps) {
 
 const styles = StyleSheet.create({
     textInputContainer: {
-        borderWidth: 1,
+        borderWidth: 0.5,
         borderColor: 'black',
         height: 30,
         padding: 5,

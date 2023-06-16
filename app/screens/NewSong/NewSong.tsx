@@ -1,5 +1,12 @@
 import React, { useState } from 'react'
-import { StyleSheet, View, Image, TouchableOpacity, Text } from 'react-native'
+import {
+    StyleSheet,
+    View,
+    Image,
+    TouchableOpacity,
+    Text,
+    KeyboardAvoidingView,
+} from 'react-native'
 import { TextInput } from '../../components/TextInput/TextInput'
 import { getDocumentAsync, DocumentResult } from 'expo-document-picker'
 import * as ImagePicker from 'expo-image-picker'
@@ -68,7 +75,11 @@ export function NewSong() {
 
     return (
         <View style={styles.container}>
-            <View style={styles.card}>
+            <KeyboardAvoidingView
+                contentContainerStyle={styles.card}
+                behavior='position'
+                keyboardVerticalOffset={30}
+            >
                 <Text style={styles.title}>New Song</Text>
                 <TouchableOpacity
                     style={styles.imageContainer}
@@ -100,11 +111,14 @@ export function NewSong() {
                         <Text>Cancel</Text>
                     </TouchableOpacity>
 
-                    <TouchableOpacity onPress={saveSong}>
+                    <TouchableOpacity
+                        onPress={saveSong}
+                        disabled={!image || !title || !songFile}
+                    >
                         <Text>Submit</Text>
                     </TouchableOpacity>
                 </View>
-            </View>
+            </KeyboardAvoidingView>
         </View>
     )
 }
@@ -119,7 +133,7 @@ const styles = StyleSheet.create({
 
     card: {
         padding: 20,
-        width: '80%',
+        width: 300,
         backgroundColor: 'white',
 
         shadowColor: '#000000',
