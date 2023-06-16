@@ -1,14 +1,9 @@
 import AsyncStorage from '@react-native-async-storage/async-storage'
-
-export type SongData = {
-    imageUri: string
-    title: string
-    songUri: string
-}
+import { Track } from 'react-native-track-player'
 
 const SONG_KEY = 'hidden-music-songs'
 
-export async function saveSongToStorage(song: SongData) {
+export async function saveSongToStorage(song: Track) {
     try {
         const songs = await fetchSongs()
         songs.push(song)
@@ -19,13 +14,13 @@ export async function saveSongToStorage(song: SongData) {
     }
 }
 
-export async function fetchSongs(): Promise<SongData[]> {
+export async function fetchSongs(): Promise<Track[]> {
     try {
         const songsString = await AsyncStorage.getItem(SONG_KEY)
 
         if (songsString) {
             const songsParsed = JSON.parse(songsString)
-            return songsParsed as SongData[]
+            return songsParsed as Track[]
         }
     } catch (e) {
         console.error(e)

@@ -2,11 +2,20 @@ import React from 'react'
 import { Image, StyleSheet, Text, View } from 'react-native'
 import { useMusicContext } from '../../hooks/useMusicContext'
 import { THEME } from '../../styles/Colors'
+import { NextButton } from '../icons/Next'
 import { PauseButton } from '../icons/Pause'
 import { PlayButton } from '../icons/Play'
+import { PreviousButton } from '../icons/Previous'
 
 export function NowPlaying() {
-    const { isPlaying, curSong, pauseSong, resumeSong } = useMusicContext()
+    const {
+        curSong,
+        isPlaying,
+        pauseSong,
+        resumeSong,
+        nextSong,
+        previousSong,
+    } = useMusicContext()
 
     if (!curSong) {
         return (
@@ -21,16 +30,18 @@ export function NowPlaying() {
             <View style={styles.titleAndImage}>
                 <Image
                     style={styles.songImage}
-                    source={{ uri: curSong.imageUri }}
+                    source={{ uri: String(curSong.artwork) }}
                 />
                 <Text style={styles.songTitleText}>{curSong.title}</Text>
             </View>
             <View style={styles.buttonContainer}>
+                <PreviousButton onPress={previousSong} />
                 {isPlaying ? (
                     <PauseButton onPress={pauseSong} />
                 ) : (
                     <PlayButton onPress={resumeSong} />
                 )}
+                <NextButton onPress={nextSong} />
             </View>
         </View>
     )
@@ -78,7 +89,9 @@ const styles = StyleSheet.create({
     },
 
     buttonContainer: {
+        width: 140,
+        flexDirection: 'row',
         alignItems: 'center',
-        justifyContent: 'center',
+        justifyContent: 'space-between',
     },
 })

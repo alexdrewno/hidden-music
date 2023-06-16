@@ -3,14 +3,17 @@ import { StyleSheet, View, Image, TouchableOpacity, Text } from 'react-native'
 import { TextInput } from '../../components/TextInput/TextInput'
 import { getDocumentAsync, DocumentResult } from 'expo-document-picker'
 import * as ImagePicker from 'expo-image-picker'
-import { saveSongToStorage, SongData } from '../../data/SongStorage'
+import { saveSongToStorage } from '../../data/SongStorage'
 import { useNavigation } from '@react-navigation/native'
 import { THEME } from '../../styles/Colors'
+import { useMusicContext } from '../../hooks/useMusicContext'
+import { Track } from 'react-native-track-player'
 
 export function NewSong() {
     const [songFile, setSongFile] = useState<DocumentResult>()
     const [image, setImage] = useState<string>()
     const [title, setTitle] = useState<string>('')
+    const { fetchAllSongs } = useMusicContext()
 
     const navigation = useNavigation()
 
@@ -48,13 +51,14 @@ export function NewSong() {
     async function saveSong() {
         try {
             if (title && image && songFile?.type === 'success') {
-                const songData: SongData = {
-                    imageUri: image,
-                    songUri: songFile.uri,
+                const songData: Track = {
+                    url: songFile.uri,
                     title: title,
+                    artwork: image,
                 }
 
                 await saveSongToStorage(songData)
+                await fetchAllSongs()
                 navigation.goBack()
             }
         } catch (e) {
@@ -137,8 +141,6 @@ const styles = StyleSheet.create({
 
     image: {
         flex: 1,
-        borderBottomLeftRadius: 10,
-        borderBottomRightRadius: 10,
     },
 
     fileContainer: {

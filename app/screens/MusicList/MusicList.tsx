@@ -12,18 +12,18 @@ import { SongCard } from '../../components/SongCard/SongCard'
 import { NowPlaying } from '../../components/NowPlaying/NowPlaying'
 import { THEME } from '../../styles/Colors'
 import { useMusicContext } from '../../hooks/useMusicContext'
-import { SongData } from '../../data/SongStorage'
+import { Track } from 'react-native-track-player'
 
 export function MusicList() {
-    const { songs, curSong, setCurSong, pauseSong, isPlaying, resumeSong } =
+    const { songs, curSong, playSong, pauseSong, isPlaying, resumeSong } =
         useMusicContext()
     const navigation = useNavigation()
 
-    function _onPressPlay(song: SongData) {
+    function _onPressPlay(song: Track) {
         if (!isPlaying && song === curSong) {
             resumeSong()
         } else {
-            setCurSong(song)
+            playSong(song)
         }
     }
 

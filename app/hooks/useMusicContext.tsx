@@ -5,10 +5,14 @@ import React, {
     useEffect,
     useState,
 } from 'react'
-import { fetchSongs, SongData } from '../data/SongStorage'
+import { fetchSongs } from '../data/SongStorage'
 
-import { Audio } from 'expo-av'
-import { Sound } from 'expo-av/build/Audio'
+import TrackPlayer, {
+    Event,
+    State,
+    Track,
+    useTrackPlayerEvents,
+} from 'react-native-track-player'
 
 type MusicProviderProps = {
     children: ReactNode
@@ -16,14 +20,16 @@ type MusicProviderProps = {
 
 type MusicContextType =
     | {
-          curSong?: SongData
-          setCurSong: React.Dispatch<React.SetStateAction<SongData | undefined>>
-          songs: SongData[]
+          curSong?: Track
+          songs: Track[]
           isPlaying: boolean
           setIsPlaying: React.Dispatch<React.SetStateAction<boolean>>
-          playSong: (_: SongData) => void
-          pauseSong: VoidFunction
-          resumeSong: VoidFunction
+          playSong: (_: Track) => void
+          pauseSong: () => Promise<void>
+          nextSong: () => Promise<void>
+          previousSong: () => Promise<void>
+          resumeSong: () => Promise<void>
+          fetchAllSongs: () => Promise<void>
       }
     | undefined
 
@@ -41,75 +47,95 @@ export const useMusicContext = () => {
 
 export const MusicProvider = (props: MusicProviderProps) => {
     const { children } = props
-    const [curSong, setCurSong] = useState<SongData>()
-    const [songs, setSongs] = useState<SongData[]>([])
-    const [sound, setSound] = useState<Sound>()
+    const [songs, setSongs] = useState<Track[]>([])
+    const [curSong, setCurSong] = useState<Track>()
     const [isPlaying, setIsPlaying] = useState<boolean>(false)
 
-    async function _fetchAllSongs() {
+    useTrackPlayerEvents([Event.PlaybackTrackChanged], async (event) => {
+        if (
+            event.type === Event.PlaybackTrackChanged &&
+            event.nextTrack != null
+        ) {
+            const song = songs[event.nextTrack]
+
+            if (song) {
+                setCurSong(song)
+            }
+        }
+    })
+
+    useTrackPlayerEvents([Event.PlaybackState], async (event) => {
+        if (event.state === State.Playing) {
+            setIsPlaying(true)
+        }
+        if (event.state === State.Paused || event.state === State.Stopped) {
+            setIsPlaying(false)
+        }
+    })
+
+    async function fetchAllSongs() {
         const fetchedSongs = await fetchSongs()
+
+        await TrackPlayer.reset()
+        await TrackPlayer.add(fetchedSongs)
+
         setSongs(fetchedSongs)
     }
 
-    async function playSong(song: SongData) {
+    async function playSong(song: Track) {
         try {
-            await Audio.setAudioModeAsync({
-                staysActiveInBackground: true,
-                playsInSilentModeIOS: true,
-            })
+            const indexOfSong = songs.indexOf(song)
 
-            const { sound } = await Audio.Sound.createAsync({
-                uri: song.songUri,
-            })
-
-            setSound(sound)
-
-            await sound.playAsync()
+            if (indexOfSong !== -1) {
+                await TrackPlayer.skip(indexOfSong)
+                await TrackPlayer.play()
+            }
         } catch (e) {
             console.error(e)
         }
     }
 
     async function pauseSong() {
-        await sound?.pauseAsync()
-        setIsPlaying(false)
+        await TrackPlayer.pause()
     }
 
     async function resumeSong() {
-        await sound?.playAsync()
-        setIsPlaying(true)
+        await TrackPlayer.play()
+    }
+
+    async function nextSong() {
+        if (curSong === songs[songs.length - 1]) {
+            await TrackPlayer.skip(0)
+        } else {
+            await TrackPlayer.skipToNext()
+        }
+    }
+
+    async function previousSong() {
+        if (curSong === songs[0]) {
+            await TrackPlayer.skip(songs.length - 1)
+        } else {
+            await TrackPlayer.skipToPrevious()
+        }
     }
 
     useEffect(() => {
-        return sound
-            ? () => {
-                  sound.unloadAsync()
-              }
-            : undefined
-    }, [sound])
-
-    useEffect(() => {
-        if (curSong) {
-            playSong(curSong)
-            setIsPlaying(true)
-        }
-    }, [curSong])
-
-    useEffect(() => {
-        _fetchAllSongs()
+        fetchAllSongs()
     }, [])
 
     return (
         <MusicContext.Provider
             value={{
                 curSong,
-                setCurSong,
                 songs,
                 isPlaying,
                 setIsPlaying,
                 playSong,
                 pauseSong,
                 resumeSong,
+                fetchAllSongs,
+                nextSong,
+                previousSong,
             }}
         >
             {children}
