@@ -9,22 +9,32 @@ import {
 import { Track } from 'react-native-track-player'
 import { PauseButton } from '../icons/Pause'
 import { PlayButton } from '../icons/Play'
+import { XButton } from '../icons/X'
 
 type SongCardProps = {
     song: Track
     onPressPlay: (event: GestureResponderEvent) => void
     onPressPause: (event: GestureResponderEvent) => void
+    onPressDelete: (event: GestureResponderEvent) => void
     isPlaying: boolean
+    isEditing: boolean
 }
 
 export function SongCard({
     song,
     onPressPlay,
     onPressPause,
+    onPressDelete,
     isPlaying,
+    isEditing,
 }: SongCardProps) {
     return (
         <View style={[isPlaying && styles.selected, styles.container]}>
+            {isEditing && (
+                <View style={styles.deleteContainer}>
+                    <XButton onPress={onPressDelete} />
+                </View>
+            )}
             <Image
                 style={styles.imageContainer}
                 source={{ uri: String(song.artwork) }}
@@ -95,5 +105,10 @@ const styles = StyleSheet.create({
     songSubtitle: {
         fontWeight: '300',
         color: 'white',
+    },
+
+    deleteContainer: {
+        justifyContent: 'center',
+        paddingRight: 8,
     },
 })
