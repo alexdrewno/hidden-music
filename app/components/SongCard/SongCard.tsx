@@ -6,20 +6,15 @@ import {
     Text,
     View,
 } from 'react-native'
+import { Track } from 'react-native-track-player'
 import { PauseButton } from '../icons/Pause'
 import { PlayButton } from '../icons/Play'
 
 type SongCardProps = {
-    song: Song
+    song: Track
     onPressPlay: (event: GestureResponderEvent) => void
     onPressPause: (event: GestureResponderEvent) => void
     isPlaying: boolean
-}
-
-type Song = {
-    title: string
-    imageUri: string
-    songUri: string
 }
 
 export function SongCard({
@@ -32,7 +27,7 @@ export function SongCard({
         <View style={[isPlaying && styles.selected, styles.container]}>
             <Image
                 style={styles.imageContainer}
-                source={{ uri: song.imageUri }}
+                source={{ uri: String(song.artwork) }}
             />
             <View style={styles.detailContainer}>
                 <View style={styles.subdetailContainer}>
