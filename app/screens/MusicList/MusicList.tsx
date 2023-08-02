@@ -47,7 +47,7 @@ export function MusicList() {
             <View style={styles.buttonContainer}>
                 <Button
                     color='white'
-                    title='Edit'
+                    title={isEditing ? 'Done' : 'Edit'}
                     onPress={() =>
                         setIsEditing((prevIsEditing: boolean) => !prevIsEditing)
                     }
