@@ -1,7 +1,7 @@
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import { Track } from 'react-native-track-player'
 
-const SONG_KEY = 'hidden-music-songs'
+export const SONG_KEY = 'hidden-music-songs'
 
 export async function saveSongToStorage(song: Track) {
     try {
