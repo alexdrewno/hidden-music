@@ -47,7 +47,7 @@ describe('MusicList', () => {
         const songs = [generateSong(), generateSong()]
         await AsyncStorage.setItem(SONG_KEY, JSON.stringify(songs))
 
-        const { findByText, getByText } = render(
+        const { findByText, getAllByTestId } = render(
             <NavigationContainer>
                 <MusicProvider>
                     <MusicList />
@@ -61,5 +61,36 @@ describe('MusicList', () => {
         fireEvent.press(editButton)
 
         expect(await findByText('Done')).toBeTruthy()
+        expect(getAllByTestId('x-button')).toHaveLength(songs.length)
+    })
+
+    test('should be able to remove a song', async () => {
+        const songs = [generateSong(), generateSong()]
+        await AsyncStorage.setItem(SONG_KEY, JSON.stringify(songs))
+
+        const { findByText, getAllByTestId, queryByText, getByText } = render(
+            <NavigationContainer>
+                <MusicProvider>
+                    <MusicList />
+                </MusicProvider>
+            </NavigationContainer>
+        )
+
+        const editButton = await findByText('Edit')
+        expect(editButton).toBeTruthy()
+        expect(getByText(songs[0].title)).toBeTruthy()
+        expect(getByText(songs[1].title)).toBeTruthy()
+
+        fireEvent.press(editButton)
+
+        expect(await findByText('Done')).toBeTruthy()
+
+        const xButtons = getAllByTestId('x-button')
+        expect(xButtons).toHaveLength(songs.length)
+
+        fireEvent.press(xButtons[1])
+
+        expect(await findByText(songs[0].title)).toBeTruthy()
+        expect(queryByText(songs[1].title)).toBeFalsy()
     })
 })

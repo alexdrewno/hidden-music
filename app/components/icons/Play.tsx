@@ -14,7 +14,11 @@ type PlayProps = {
 
 export function PlayButton({ onPress }: PlayProps) {
     return (
-        <TouchableOpacity style={styles.container} onPress={onPress}>
+        <TouchableOpacity
+            testID='play-button'
+            style={styles.container}
+            onPress={onPress}
+        >
             <Image style={styles.img} source={PlayImg} />
         </TouchableOpacity>
     )

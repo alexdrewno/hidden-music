@@ -14,7 +14,11 @@ type XProps = {
 
 export function XButton({ onPress }: XProps) {
     return (
-        <TouchableOpacity style={styles.container} onPress={onPress}>
+        <TouchableOpacity
+            testID='x-button'
+            style={styles.container}
+            onPress={onPress}
+        >
             <Image style={styles.img} source={XImg} />
         </TouchableOpacity>
     )

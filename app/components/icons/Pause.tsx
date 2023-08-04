@@ -14,7 +14,11 @@ type PauseProps = {
 
 export function PauseButton({ onPress }: PauseProps) {
     return (
-        <TouchableOpacity style={styles.container} onPress={onPress}>
+        <TouchableOpacity
+            testId='pause-button'
+            style={styles.container}
+            onPress={onPress}
+        >
             <Image style={styles.img} source={PauseImg} />
         </TouchableOpacity>
     )
