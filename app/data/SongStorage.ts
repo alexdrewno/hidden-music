@@ -18,9 +18,8 @@ export async function removeSongFromStorage(song: Track) {
     try {
         const songs = await fetchSongs()
 
-        const removalIndex = songs.findIndex((e, i) => {
-            e.url === song.url && e.title === song.title
-            return i
+        const removalIndex = songs.findIndex((e) => {
+            return e.url === song.url && e.title === song.title
         })
 
         if (removalIndex > -1) {
