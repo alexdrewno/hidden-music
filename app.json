@@ -1,46 +1,58 @@
 {
-    "expo": {
-        "name": "HiddenMusic",
-        "slug": "hidden-music",
-        "version": "1.1.1",
-        "orientation": "portrait",
-        "icon": "./app/assets/icon.png",
-        "userInterfaceStyle": "light",
-        "splash": {
-            "image": "./app/assets/splash.png",
-            "resizeMode": "contain",
-            "backgroundColor": "#ffffff"
-        },
-        "assetBundlePatterns": ["**/*"],
-        "ios": {
-            "supportsTablet": true,
-            "infoPlist": {
-                "UIBackgroundModes": ["audio"]
-            },
-            "bundleIdentifier": "com.kirbec.hiddenmusic"
-        },
-        "android": {
-            "adaptiveIcon": {
-                "foregroundImage": "./app/assets/adaptive-icon.png",
-                "backgroundColor": "#ffffff"
-            },
-            "permissions": ["android.permission.RECORD_AUDIO"]
-        },
-        "web": {
-            "favicon": "./assets/favicon.png"
-        },
-        "plugins": [
-            [
-                "expo-image-picker",
-                {
-                    "photosPermission": "The app accesses your photos to use as song covers."
-                }
-            ]
-        ],
-        "extra": {
-            "eas": {
-                "projectId": "2291ef6f-cc46-42e3-a617-a87eae96d658"
-            }
+  "expo": {
+    "name": "HiddenMusic",
+    "slug": "hidden-music",
+    "version": "1.1.1",
+    "orientation": "portrait",
+    "icon": "./app/assets/icon.png",
+    "userInterfaceStyle": "light",
+    "splash": {
+      "image": "./app/assets/splash.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#ffffff"
+    },
+    "assetBundlePatterns": [
+      "**/*"
+    ],
+    "ios": {
+      "supportsTablet": true,
+      "infoPlist": {
+        "UIBackgroundModes": [
+          "audio"
+        ]
+      },
+      "bundleIdentifier": "com.kirbec.hiddenmusic"
+    },
+    "android": {
+      "adaptiveIcon": {
+        "foregroundImage": "./app/assets/adaptive-icon.png",
+        "backgroundColor": "#ffffff"
+      },
+      "permissions": [
+        "android.permission.RECORD_AUDIO"
+      ]
+    },
+    "web": {
+      "favicon": "./assets/favicon.png"
+    },
+    "plugins": [
+      [
+        "expo-image-picker",
+        {
+          "photosPermission": "The app accesses your photos to use as song covers."
         }
+      ]
+    ],
+    "extra": {
+      "eas": {
+        "projectId": "2291ef6f-cc46-42e3-a617-a87eae96d658"
+      }
+    },
+    "runtimeVersion": {
+      "policy": "sdkVersion"
+    },
+    "updates": {
+      "url": "https://u.expo.dev/2291ef6f-cc46-42e3-a617-a87eae96d658"
     }
+  }
 }
